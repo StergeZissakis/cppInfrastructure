@@ -1,0 +1,36 @@
+mkfile_path := $(abspath $(firstword $(MAKEFILE_LIST)))
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+basefile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+base_dir := $(dir $(basefile_path))
+
+GCC=c++
+DEBUG=-g
+INCLUDES= -I. -I$(base_dir)src/ -I$(base_dir)include/ 
+CPPFLAGS= $(DEBUG) -std=c++11 $(INCLUDES)
+LIB_DIR= $(base_dir)lib/
+STATIC_LIBS=$(addprefix $(LIB_DIR), $(STATICS))
+LDFLAGS=  -pthread
+LDLIBS= 
+
+SRCS=$(wildcard $(SRC_DIR)/*.cpp)
+OBJS=$(subst .cpp,.o,$(SRCS))
+
+all: $(BIN) $(LIB)
+
+install: $(BIN) $(LIB)
+	$(foreach bin,$(BIN), install $(bin) $(base_dir)/bin/; )
+	$(foreach lib,$(LIB), install $(lib) $(base_dir)/lib/; )
+
+clean: 
+	rm -f $(OBJS) $(LIB) $(BIN) 
+
+$(BIN) : $(OBJS)
+	$(GCC) $^ $(STATIC_LIBS) $(LDFLAGS) $(LDLIBS) -o $@
+
+$(LIB) : $(OBJS)
+	$(GCC) -shared $^ -o $@
+
+$(SRC_DIR)/%.o : $(SRC_DIR)/%.cpp 
+	$(GCC) $(CPPFLAGS) -c $< -o $@
+
+
