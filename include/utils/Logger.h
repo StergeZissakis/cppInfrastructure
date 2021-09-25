@@ -12,7 +12,7 @@
 class Logger
 {
   public:
-    Logger(const char * cname, const char *fname)
+    Logger(const std::string &cname, const std::string &fname)
       : className(cname), functionName(fname)
     {
       this->log("Entered");
@@ -23,8 +23,7 @@ class Logger
       this->log("Exited");
     }
 
-    void log(const char *msg)                 const  { log_line(msg);             }
-    void log(const std::string &str)          const { log_line(str.c_str());    }
+    void log(const std::string &str)          const { log_line(str);    }
     void log(const std::stringstream &stream) const { this->log(stream.str());  }
 
     static bool enabled;
@@ -57,7 +56,7 @@ class Logger
       return  stream.str();
     }
 
-    void log_line(const char *message) const
+    void log_line(const std::string &message) const
     {
       if( !enabled )
         return;

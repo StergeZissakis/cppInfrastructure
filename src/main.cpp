@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 {
   // initialise the logger: redirect std::clog to a log file
   std::stringstream logFileName;
-  logFileName << "GetHurricaneLoss." << ::getpid() << ".log";
+  logFileName << "MyProject." << ::getpid() << ".log";
   std::ofstream logFile(logFileName.str());
   std::streambuf *clogBuff = std::clog.rdbuf();
   std::clog.rdbuf(logFile.rdbuf());
@@ -35,13 +35,7 @@ int main(int argc, char **argv)
     Logger log("Main", "Function");
 
     std::map<std::string, std::string> params = { 
-      {"", 0},
-      {"", 0},
-      {"", 0},
-      {"", 0},
-      {"", 0},
-      {"", 0},
-      {"", 0} };
+      {"", ""} };
 
     for(int i = 1; i < argc; ++i)
     {
